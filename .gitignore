@@ -30,4 +30,7 @@
 
 # Target
 main
+
+# Folders
 build
+.vscode
