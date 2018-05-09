@@ -24,6 +24,8 @@ class Camera {
   glm::vec3 getCenter();
   glm::vec3 getEye();
 
+  void setCenter(glm::vec3 center) { center_ = center; }
+
  private:
   glm::vec3 center_;
   glm::vec3 up_;
@@ -37,6 +39,7 @@ class Camera {
   float range_;
 
   bool permit_update_;
+  bool permit_drag_;
 
   void updateCameraVectors();
 };

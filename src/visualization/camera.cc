@@ -25,7 +25,8 @@ Camera::Camera(glm::vec3 center, glm::vec3 up, float yaw, float pitch)
       pitch_{pitch},
       sensitivity_{0.25f},
       range_{10.f},
-      permit_update_{false} {
+      permit_update_{false},
+      permit_drag_{false} {
   updateCameraVectors();
 }
 
@@ -51,10 +52,17 @@ void Camera::processMouseMovement(float xoffset, float yoffset,
 
     updateCameraVectors();
   }
+  if (permit_drag_) {
+    xoffset *= sensitivity_;
+    yoffset *= sensitivity_;
+
+    center_ -= xoffset * right_;
+    center_ -= yoffset * up_;
+  }
 }
 
 void Camera::processMouseScroll(float yoffset) {
-  range_ += yoffset * 0.1f;  // SCROLL SENSITIVITY
+  range_ += yoffset * 0.5f;  // SCROLL SENSITIVITY
   if (range_ < 0.f) range_ = 0.f;
 }
 
@@ -63,6 +71,10 @@ void Camera::processMouseButton(int button, int action, int mods) {
     permit_update_ = true;
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
     permit_update_ = false;
+  if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
+    permit_drag_ = true;
+  if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE)
+    permit_drag_ = false;
 }
 
 glm::vec3 Camera::getCenter() { return center_; }

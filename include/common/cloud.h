@@ -32,9 +32,9 @@ class Cloud {
   void addPoint(Point p);
 
   float* getPositionData();
-  uint8_t* getColorData();
-  uint8_t* getIntensityData();
-  uint8_t* getValidityData();
+  uint32_t* getColorData();
+  uint32_t* getIntensityData();
+  uint32_t* getValidityData();
 
   size_t size();
 };

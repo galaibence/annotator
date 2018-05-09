@@ -1,3 +1,5 @@
+#include <chrono>
+#include <fstream>
 #include <iostream>
 
 #include "common/cloud.h"
@@ -11,24 +13,26 @@ int main(int argc, char* argv[]) {
   Cloud cloud;
   cloud.addFloatAttribute(new PositionAttribute());
   cloud.addUintAttribute(new ColorAttribute());
+  cloud.addUintAttribute(new ValidityAttribute());
 
   float x, y, z;
-  uint8_t r, g, b;
+  int r, g, b;
   Point p;
-  for (size_t i = 0; i < 1000; i++) {
-    x = ((std::rand() / (float)RAND_MAX) * 2.0f - 1.0f) * 1.0f;
-    y = ((std::rand() / (float)RAND_MAX) * 2.0f - 1.0f) * 1.0f;
-    z = ((std::rand() / (float)RAND_MAX) * 2.0f - 1.0f) * 1.0f;
-    r = rand() % 256;
-    g = rand() % 256;
-    b = rand() % 256;
+
+  std::ifstream ifs;
+  ifs.open(argv[1]);
+
+  while (ifs >> x >> y >> z >> r >> g >> b) {
     p.setXYZ(x, y, z);
-    p.setRGB(r, g, b);
+    p.setRGB((uint32_t)r, (uint32_t)g, (uint32_t)b);
+    p.setValidity(255);
     cloud.addPoint(p);
   }
 
-  visualization::Viewer viewer(&cloud, 600, 600);
-  viewer.init();
+  visualization::Viewer viewer(&cloud);
+  viewer.init(600, 600);
   viewer.draw();
+  viewer.close();
+
   return 0;
 }

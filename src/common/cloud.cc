@@ -66,7 +66,7 @@ float* Cloud::getPositionData() {
     return iter->second->data();
 }
 
-uint8_t* Cloud::getColorData() {
+uint32_t* Cloud::getColorData() {
   auto iter = uint_attributes_.find("color");
 
   if (iter == uint_attributes_.end())
@@ -75,7 +75,7 @@ uint8_t* Cloud::getColorData() {
     return iter->second->data();
 }
 
-uint8_t* Cloud::getIntensityData() {
+uint32_t* Cloud::getIntensityData() {
   auto iter = uint_attributes_.find("intensity");
 
   if (iter == uint_attributes_.end())
@@ -84,7 +84,7 @@ uint8_t* Cloud::getIntensityData() {
     return iter->second->data();
 }
 
-uint8_t* Cloud::getValidityData() {
+uint32_t* Cloud::getValidityData() {
   auto iter = uint_attributes_.find("validity");
 
   if (iter == uint_attributes_.end())

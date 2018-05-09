@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <memory>
 
 #include "annotation/annotator.h"
 #include "common/cloud.h"
@@ -23,11 +24,13 @@ class Viewer {
 
   common::Cloud* cloud_;
   Shader shader_;
+  Shader rect_shader_;
+  Shader comp_shader_;
   Buffers buffers_;
-  std::unique_ptr<annotation::Annotator> annotator_;
+  Buffers rect_buffers_;
 
-  int width_;
-  int height_;
+  static int width_;
+  static int height_;
   float delta_time_;
   float last_time_;
 
@@ -40,18 +43,21 @@ class Viewer {
                                   int mods);
   static bool keys_[1024];
   static bool first_mouse_;
+  static bool left_mouse_pressed_;
   static int last_x_;
   static int last_y_;
   static Camera camera_;
 
+  static std::unique_ptr<annotation::Annotator> annotator_;
+
   void bindBuffers();
   void update();
-  void getRay(float x, float y, glm::vec3& orig, glm::vec3& dir);
+  static void getRay(float x, float y, glm::vec3& orig, glm::vec3& dir);
 
  public:
-  Viewer(common::Cloud* cloud = nullptr, int width = 600, int height = 600);
+  Viewer(common::Cloud* cloud = nullptr);
 
-  void init();
+  void init(uint32_t width, uint32_t height);
   void draw();
   void close();
 };

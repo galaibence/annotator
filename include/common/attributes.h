@@ -40,7 +40,7 @@ class FloatAttribute : public Attribute<float> {
       : Attribute{attribute_name, component_size} {}
 };
 
-class UintAttribute : public Attribute<uint8_t> {
+class UintAttribute : public Attribute<uint32_t> {
  public:
   UintAttribute(std::string attribute_name = "", size_t component_size = 3)
       : Attribute{attribute_name, component_size} {}

@@ -1,11 +1,11 @@
 CXX         = clang++
-CXXFLAGS    = -std=c++1z -stdlib=libc++ -Wall -pedantic -c
-LDFLAGS     = -lc++ -lc++abi -lGLEW -lglfw -lGL
+CXXFLAGS    = -O3 -std=c++17 -Wall -pedantic -c
+LDFLAGS     = -flto -lGLEW -lglfw -lGL
 INCFLAGS    = -I./include
 
 TARGET      = main
 MODULES     = . \
-						  annotation \
+							annotation \
 							common \
 							visualization
 
@@ -14,14 +14,13 @@ INC_DIR     = $(addprefix include/,$(MODULES))
 BUILD_DIR   = $(addprefix build/,$(MODULES))
 RSRC_DIR    = ./resources
 
-SOURCES	  	= $(foreach sdir,$(SRC_DIR),$(wildcard $(sdir)/*.cc))
+SOURCES	    = $(foreach sdir,$(SRC_DIR),$(wildcard $(sdir)/*.cc))
 INCLUDES    = $(foreach idir,$(INC_DIR),$(wildcard $(idir)/*.h))
-OBJECTS 	  = $(patsubst src/%.cc,build/%.o,$(SOURCES))
+OBJECTS	    = $(patsubst src/%.cc,build/%.o,$(SOURCES))
 
 first: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	export LD_LIBRARY_PATH=/home/bence/llvm-release/lib:/home/bence/libcxx-release/lib
 	$(CXX) $(LDFLAGS) $^ -o $@
 
 build/%.o: src/%.cc

@@ -1,25 +1,30 @@
-#version 330
+#version 430
 
-layout (location = 0) in vec3 vertex;
-layout (location = 1) in vec3 color;
-layout (location = 2) in int selected;
+#extension GL_ARB_compute_shader : enable
+#extension GL_ARB_shader_storage_buffer_object : enable
 
-out int g_selected;
-out vec3 g_color;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+layout(std430, binding = 0) buffer position_buffer {
+  vec3 position[];
+};
+
+layout(std430, binding = 2) buffer selection_buffer {
+  uint selection[];
+};
 
 uniform int number_of_active_selections;
 uniform int number_of_active_negative_selections;
-uniform float active_selection[16 * 30];
-uniform float active_negative_selection[16 * 30];
+uniform float active_selection[16 * 10];
+uniform float active_negative_selection[16 * 10];
 
 void main() {
 
+  uint id = gl_GlobalInvocationID.x;
+  vec3 vertex = position[id];
+
   bool active_selected = false;
-  int last_selection_if_selected = 0;
+  int last_selection_if_selected = -1;
   for (int i = 0; i < number_of_active_selections; i++) {
     vec3 orig = vec3(
       active_selection[i * 16 + 0 * 3 + 0],
@@ -86,15 +91,11 @@ void main() {
     }
   }
 
-  if (selected == 255) {
-    g_color = vec3(0.0f, 0.5f, 0.0f) + color * 1.f / 255.f;
-  }
-  else if (active_selected &&
+  if (active_selected &&
       last_selection_if_selected >
-      last_negative_selection_if_selected)
-    g_color = vec3(0.5f, 0.0f, 0.0f) + color * 1.f / 255.f;
-  else g_color = color * 1.f / 255.f;
+      last_negative_selection_if_selected) {
+    selection[id] = uint(0);
+  }
 
-  g_selected = selected;
-  gl_Position = projection * view * model * vec4(vertex, 1.0f);
+
 }

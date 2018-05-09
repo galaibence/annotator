@@ -17,13 +17,13 @@ struct Point {
   float y;
   float z;
 
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
+  uint32_t r;
+  uint32_t g;
+  uint32_t b;
 
   uint8_t intensity;
 
-  uint8_t valid;
+  uint32_t valid;
 
   Point() : valid{false} {}
 
@@ -34,7 +34,7 @@ struct Point {
     tag = tag | kXYZ;
   }
 
-  void setRGB(uint8_t R, uint8_t G, uint8_t B) {
+  void setRGB(uint32_t R, uint32_t G, uint32_t B) {
     r = R;
     g = G;
     b = B;
@@ -46,7 +46,7 @@ struct Point {
     tag = tag | kIntensity;
   }
 
-  void setValidity(uint8_t V) {
+  void setValidity(uint32_t V) {
     valid = V;
     tag = tag | kValidity;
   }

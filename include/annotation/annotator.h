@@ -36,11 +36,23 @@ class Annotator {
   int numberOfActiveSelections() { return selections_.size(); }
   int numberOfActiveNegativeSelections() { return negative_selections_.size(); }
 
-  Selection* getActiveSelectionFloatArray() {
-    return selections_.data();
-  }
+  Selection* getActiveSelectionFloatArray() { return selections_.data(); }
   Selection* getActiveNegativeSelectionFloatArray() {
     return negative_selections_.data();
+  }
+
+  void getRectangle(float& topLeftX, float& topLeftY, float& bottomRightX,
+                    float& bottomRightY) {
+    topLeftX = std::min(rectangle_.topLeftX, rectangle_.bottomRightX);
+    topLeftY = std::min(rectangle_.topLeftY, rectangle_.bottomRightY);
+    bottomRightX = std::max(rectangle_.topLeftX, rectangle_.bottomRightX);
+    bottomRightY = std::max(rectangle_.topLeftY, rectangle_.bottomRightY);
+  }
+
+  void clearSelection() {
+    selections_.clear();
+    negative_selections_.clear();
+    active_selection_count_ = 0;
   }
 
  private:
